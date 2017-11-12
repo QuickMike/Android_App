@@ -190,7 +190,7 @@ public class ActionActivity extends AppCompatActivity implements View.OnClickLis
             float fl = Float.parseFloat(coast.getText().toString());
             float one;
             float total;
-            if (fl > 1){
+            if (fl > 0){
                 int countPay = totalPay();
                 if (rdOne.isChecked()){
                     one = fl;

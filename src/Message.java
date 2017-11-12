@@ -6,6 +6,8 @@ public class Message {
     protected  static final int IDM_DELETE = 102;
     protected  static final int IDM_BACK = 103;
     protected  static final int IDM_BACK_ALL = 104;
+    protected  static final int IDM_DEL_ALL = 105;
+    protected  static final int IDM_CLEAR_ALL = 106;
 
     protected static final String NOT_CHOICE = "<f>";
     protected static final String CHOICE = "<t>";

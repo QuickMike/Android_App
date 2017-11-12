@@ -130,20 +130,26 @@ public class ListActivity extends AppCompatActivity{
         Intent intent = null;
         switch (id){
             case R.id.itemDelAll:
-                delList();
-                setList();
+                if (arrayListWork.size() == 1 && arrayListWork.get(0).length() == 0){
+                    break;
+                }
+                newDialog(Message.IDM_DEL_ALL);
                 break;
             case R.id.itemPlus:
                 intent = new Intent(this, AddPlayerList.class);
                 startActivityForResult(intent, 1);
                 break;
             case R.id.itemSetNull:
-                setNull();
-                setList();
+                if (arrayListWork.size() == 1 && arrayListWork.get(0).length() == 0){
+                    break;
+                }
+                newDialog(Message.IDM_CLEAR_ALL);
                 break;
         }
         return super.onOptionsItemSelected(item);
     }
+
+
 
     private void setNull() {
         if (arrayListWork.size() == 1 && arrayListWork.get(0).length() == 0){
@@ -179,6 +185,32 @@ public class ListActivity extends AppCompatActivity{
             toast = Toast.makeText(this, "Добавлен", Toast.LENGTH_SHORT);
             toast.show();
         }
+    }
+
+    private void newDialog(final int chose){
+        final AlertDialog.Builder alert = new AlertDialog.Builder(this);
+        if (chose == Message.IDM_DEL_ALL){
+            alert.setTitle("Удалить всех?");
+        } else if (chose == Message.IDM_CLEAR_ALL){
+            alert.setTitle("Обнулить всех?");
+        }
+        alert.setPositiveButton("Да", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                if (chose == Message.IDM_DEL_ALL){
+                    delList();
+                }else if (chose == Message.IDM_CLEAR_ALL){
+                    setNull();
+                }
+                setList();
+            }
+        });
+
+        alert.setNegativeButton("Нет", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                dialog.cancel();
+            }
+        });
+        alert.show();
     }
 
     private void newDialog(final int chose, final int position){
