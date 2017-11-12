@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    tools:context="khodkov.michael.Fundraising.AfterAction">
+
+    <TextView
+        android:id="@+id/textAfterActionTotal"
+        android:text="@string/textItogo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+    </TextView>
+
+    <TextView
+        android:id="@+id/textAfterActionOne"
+        android:text="@string/textItogoOne"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+    </TextView>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+    <Button
+        android:id="@+id/btnPayAllonAction"
+        android:text="@string/textBtnAuto"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content">
+    </Button>
+
+    <Button
+        android:layout_alignParentRight="true"
+        android:id="@+id/btnEndAction"
+        android:text="@string/textBtnEnd"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content">
+    </Button>
+
+    </RelativeLayout>
+
+    <ListView
+        android:id="@+id/listEnd"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    </ListView>
+
+</LinearLayout>

@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="khodkov.michael.Fundraising.ActionActivity">
+
+    <RelativeLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/labelActionCost"
+            android:text="@string/textCost">
+        </TextView>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/labelCount"
+            android:layout_alignParentRight="true"
+            android:text="">
+        </TextView>
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+    <EditText
+        android:inputType="numberDecimal"
+        android:text=""
+        android:id="@+id/editActionCost"
+        android:layout_height="wrap_content"
+        android:background="@android:drawable/editbox_background"
+        android:layout_width="100dp">
+    </EditText>
+
+    <RadioGroup
+        android:layout_width="match_parent"
+        android:id="@+id/radioGroupAction"
+        android:orientation="horizontal"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:text=""
+            android:visibility="invisible"
+            android:id="@+id/textActionDepositOne"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+        </TextView>
+
+        <RadioButton
+            android:text="@string/textOne"
+            android:id="@+id/radioCostOneAction"
+            android:layout_width="wrap_content"
+            android:checked="true"
+            android:layout_height="wrap_content">
+        </RadioButton>
+
+        <TextView
+            android:text=""
+            android:visibility="invisible"
+            android:id="@+id/textActionDepositAll"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+        </TextView>
+
+        <RadioButton
+            android:text="@string/textAll"
+            android:id="@+id/radioCostAllAction"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+        </RadioButton>
+
+    </RadioGroup>
+
+    </LinearLayout>
+
+    <RelativeLayout>
+
+        <Button
+            android:id="@+id/btnActionAddPlayer"
+            android:text="@string/textBtnAdd"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+        </Button>
+
+        <Button
+            android:layout_alignParentRight="true"
+            android:id="@+id/btnActionBegin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/textBtnStart">
+        </Button>
+
+    </RelativeLayout>
+
+    <ListView
+        android:layout_below="@+id/btnActionAddPlayer"
+        android:id="@+id/listAction"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    </ListView>
+
+</TableLayout>

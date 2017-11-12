@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="khodkov.michael.Fundraising.MainActivity"
+    android:orientation="vertical">
+
+    <Button
+        android:id="@+id/btnMainBegin"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="50dp"
+        android:text="@string/textBtnStart">
+    </Button>
+
+    <Button
+        android:id="@+id/btnMainEnd"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="50dp"
+        android:text="@string/textBtnEnd">
+    </Button>
+
+    <Button
+        android:id="@+id/btnMainReport"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="50dp"
+        android:text="@string/textReport">
+    </Button>
+
+    <Button
+        android:id="@+id/btnMainList"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="50dp"
+        android:text="@string/btnTextList">
+    </Button>
+
+    <TextView
+        android:gravity="center"
+        android:layout_marginTop="50dp"
+        android:layout_gravity="center"
+        android:id="@+id/labelMain"
+        android:text="Зайдите в СПИСОК ВСЕХ ИГРОКОВ и добавьте новых, чтобы начать мероприятие"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content">
+    </TextView>
+
+</LinearLayout>

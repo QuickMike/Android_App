@@ -1,0 +1,28 @@
+<resources>
+    <string name="app_name">Fundraising</string>
+    <string name="titleList">Список всех игроков</string>
+    <string name="btnTextList">Список всех игроков</string>
+    <string name="titleAction">Новое мероприятие</string>
+    <string name="itemMenuNull">Обнулить депозит всем</string>
+    <string name="itemMenuPlus">Добавить нового игрока</string>
+    <string name="itemMenuDel">Удалить всех игроков</string>
+    <string name="textFIO">ФИО игрока</string>
+    <string name="textDeposit">Депозит</string>
+    <string name="textSave">Сохранить</string>
+    <string name="hintFIO">Иванов Иван</string>
+    <string name="textNullList">Список пуст</string>
+    <string name="_0">0</string>
+    <string name="textMinus">Отрицательное</string>
+    <string name="textCost">Стоимость</string>
+    <string name="textAll">со всех</string>
+    <string name="textOne">с каждого</string>
+    <string name="textBtnAdd">добавить игроков</string>
+    <string name="textBtnStart">Начать мероприятие</string>
+    <string name="textItogo">Всего за мероприятие: </string>
+    <string name="textItogoOne">С каждого за мероприятие: </string>
+    <string name="textBtnAuto">Авто оплата за мероприятие</string>
+    <string name="textBtnEnd">Закончить мероприятие</string>
+    <string name="textReport">Отчет</string>
+    <string name="textSelectAll">Выбрать всех</string>
+
+</resources>
