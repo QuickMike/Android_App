@@ -50,18 +50,10 @@
         android:text="@string/textDeposit">
     </TextView>
 
-    <TextView
-        android:layout_marginLeft="120dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/labelMinus"
-        android:layout_below="@+id/labelSecond"
-        android:text="@string/textMinus">
-    </TextView>
 
     <EditText
         android:id="@+id/editDeposit"
-        android:inputType="numberDecimal"
+        android:inputType="numberDecimal|numberSigned"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:layout_below="@+id/labelDeposit"
@@ -69,14 +61,6 @@
         android:text="@string/_0">
     </EditText>
 
-    <CheckBox
-        android:id="@+id/checkMinus"
-        android:layout_below="@+id/labelDeposit"
-        android:layout_marginLeft="150dp"
-        android:layout_marginTop="2dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-    </CheckBox>
 
     <Button
         android:layout_below="@+id/editFIO"

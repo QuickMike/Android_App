@@ -13,7 +13,6 @@ public class AddPlayerList extends AppCompatActivity implements View.OnClickList
     private Button btn;
     private EditText editFIO;
     private EditText editDeposit;
-    protected CheckBox checkMinus;
     protected CorrectDeposit correctDeposit;
 
     @Override
@@ -34,11 +33,6 @@ public class AddPlayerList extends AppCompatActivity implements View.OnClickList
     public void onClick(View v) {
         if (v == btn && !editFIO.getText().toString().equals("")){
             Intent intent = new Intent();
-            checkMinus = (CheckBox)findViewById(R.id.checkMinus);
-            String minus = "";
-            if (checkMinus.isChecked()){
-                minus = "-";
-            }
             String stFio = editFIO.getText().toString();
             stFio = stFio.replace("\n","");
             stFio = stFio.replace(Message.DEPOSIT, "");
@@ -47,7 +41,7 @@ public class AddPlayerList extends AppCompatActivity implements View.OnClickList
             String stDepo = editDeposit.getText().toString();
             correctDeposit = new CorrectDeposit();
             stDepo = correctDeposit.setCorrectDeposit(stDepo);
-            String putString = Message.NOT_CHOICE + stFio + Message.DEPOSIT + minus + stDepo;
+            String putString = Message.NOT_CHOICE + stFio + Message.DEPOSIT + stDepo;
             intent.putExtra(Message.TEXT_NEW_PLAYER, putString);
             setResult(RESULT_OK, intent);
             finish();

@@ -64,9 +64,6 @@ public class ListActivity extends AppCompatActivity{
         listView = (ListView) findViewById(R.id.mainList);
         registerForContextMenu(listView);
         arrayListWork = loadArrayList(Message.TEXT_LIST_PLAYERS);
-
-        //arrayListView = arrayListWork;
-
         arrayListView = setForView(arrayListWork);
         newAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, arrayListView);
         listView.setAdapter(newAdapter);
@@ -158,7 +155,7 @@ public class ListActivity extends AppCompatActivity{
         for (int i = 0; i < arrayListWork.size(); i++) {
             String st = arrayListWork.get(i);
             st = st.substring(0,st.indexOf(Message.DEPOSIT) + 3);
-            st+="0.0";
+            st+="0.00";
             arrayListWork.set(i, st);
         }
         saveArrayList(Message.TEXT_LIST_PLAYERS, arrayListWork);
@@ -227,20 +224,13 @@ public class ListActivity extends AppCompatActivity{
         stateChoice = st.substring(0, 3);
         currentFIO = st.substring(3, st.indexOf(Message.DEPOSIT));
         currentDeposit = st.substring(st.indexOf(Message.DEPOSIT) + 3, st.length());
-
         if (chose == Message.IDM_ADD){
             input.setText(currentDeposit);
-
-            input.setInputType(InputType.TYPE_CLASS_NUMBER);
-
-            //input.setInputType(InputType.TYPE_NUMBER_FLAG_SIGNED);
-
+            //input.setInputType(InputType.TYPE_CLASS_NUMBER);
         } else if (chose == Message.IDM_EDIT){
             input.setText(currentFIO);
         }
-
         alert.setView(input);
-
         alert.setPositiveButton("Сохранить", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
 

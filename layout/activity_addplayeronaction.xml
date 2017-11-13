@@ -8,7 +8,7 @@
     android:orientation="vertical"
     tools:context="khodkov.michael.Fundraising.AddPlayerOnAction">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_height="wrap_content"
         android:layout_width="match_parent">
 
@@ -17,17 +17,19 @@
         android:id="@+id/btnAddonaction"
         android:text="@string/textBtnAdd"
         android:layout_width="wrap_content"
+        android:layout_gravity="center"
         android:layout_height="wrap_content">
     </Button>
 
-    <Button
-        android:id="@+id/btnCheckAll"
-        android:text="@string/textSelectAll"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-    </Button>
+        <Button
+            android:id="@+id/btnCheckAll"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_gravity="center"
+            android:text="@string/textSelectAll"></Button>
 
-    </LinearLayout>
+    </RelativeLayout>
 
     <LinearLayout
         android:layout_height="wrap_content"

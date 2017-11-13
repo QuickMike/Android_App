@@ -85,15 +85,17 @@
 
         <Button
             android:id="@+id/btnActionAddPlayer"
-            android:text="@string/textBtnAdd"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/textBtnAdd">
         </Button>
 
         <Button
             android:layout_alignParentRight="true"
             android:id="@+id/btnActionBegin"
-            android:layout_width="wrap_content"
+            android:layout_width="150dp"
+            android:layout_gravity="center"
             android:layout_height="wrap_content"
             android:text="@string/textBtnStart">
         </Button>
