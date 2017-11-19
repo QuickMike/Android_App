@@ -1,6 +1,7 @@
-package khodkov.michael.Fundraising;
+package khodkov.michael.chipin;
 
-import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.SparseBooleanArray;
@@ -9,17 +10,11 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.List;
 
 public class AddPlayerOnAction extends AppCompatActivity implements View.OnClickListener{
-
-    protected static String st;
-    protected static String stateChoice;
-    protected static String currentFIO;
-    protected static String currentDeposit;
 
     protected Button btnSelect;
     protected Button btnSelectAll;
@@ -27,12 +22,13 @@ public class AddPlayerOnAction extends AppCompatActivity implements View.OnClick
 
     protected ListView listView;
     protected ArrayAdapter<String> newAdapter;
-    protected Toast toast;
 
     protected boolean flagSelectAll;
 
-    protected static ArrayList<String> arrayListWork;
-    protected static ArrayList<String> arrayListView;
+
+    DatabaseHelper sqlHelper;
+    SQLiteDatabase db;
+    Cursor userCursor;
 
 
     @Override
@@ -45,8 +41,10 @@ public class AddPlayerOnAction extends AppCompatActivity implements View.OnClick
         btnSelectAll = (Button)findViewById(R.id.btnCheckAll);
         btnSelectAll.setOnClickListener(this);
         btnSelect.setEnabled(false);
-        setList();
         flagSelectAll = true;
+        sqlHelper = new DatabaseHelper(getApplicationContext());
+        db = getBaseContext().openOrCreateDatabase(Message.SQL_NAME_DB, MODE_PRIVATE, null);
+        setList();
     }
 
 
@@ -54,13 +52,20 @@ public class AddPlayerOnAction extends AppCompatActivity implements View.OnClick
     private void setList(){
         listView = (ListView) findViewById(R.id.listAddPlayerOnAction);
         registerForContextMenu(listView);
-        arrayListWork = loadArrayList(Message.TEXT_LIST_PLAYERS);
-
-        //arrayListView = arrayListWork;
-
-        arrayListView = setForView(arrayListWork);
-
-        newAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_multiple_choice, arrayListView);
+        db = sqlHelper.getReadableDatabase();
+        List<String> list = new ArrayList<String>();
+        userCursor =  db.rawQuery("SELECT * FROM "+ Message.SQL_NAME_USERS_TABLE + " WHERE " + DatabaseHelper.COLUMN_CHECKBOX +"=0;", null);
+        if (userCursor.getCount() == 0){
+            btnSelectAll.setEnabled(false);
+        }else {
+            btnSelectAll.setEnabled(true);
+        }
+        userCursor.moveToFirst();
+        for (int i = 0; i < userCursor.getCount(); i++) {
+            list.add(userCursor.getString(1));
+            userCursor.moveToNext();
+        }
+        newAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_multiple_choice, list);
         listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
         listView.setAdapter(newAdapter);
 
@@ -89,45 +94,11 @@ public class AddPlayerOnAction extends AppCompatActivity implements View.OnClick
 
     }
 
-    private ArrayList<String> setForView(ArrayList<String> list){
-        ArrayList<String> newList = new ArrayList<>();
-        if (list.size() == 1 && list.get(0).equals("")){
-            return newList;
-        }
-        for (int i = 0; i < list.size(); i++) {
-            String st = list.get(i);
-            stateChoice = st.substring(0, 3);
-            if (stateChoice.equals(Message.CHOICE)){
-                continue;
-            }
-            st = st.replaceFirst(Message.DEPOSIT, " ");
-            st = st.replaceFirst(Message.NOT_CHOICE, "");
-            newList.add(st);
-        }
-        return newList;
-    }
-
-    private void saveArrayList(String name, ArrayList<String> list) {
-        SharedPreferences prefs = getSharedPreferences(Message.ARRAY_LIST_PLAYERS_IN_PREF, MODE_PRIVATE);
-        SharedPreferences.Editor editor = prefs.edit();
-        StringBuilder sb = new StringBuilder();
-        for (String s : list){
-            if (!s.equals("")){
-                sb.append(s).append(Message.NEW_ITEM);
-            }
-        }
-        if (sb.length() > 3){
-            sb.delete(sb.length() - 3, sb.length());
-        }
-        editor.putString(name, sb.toString()).apply();
-    }
-
-    private ArrayList<String> loadArrayList(String name) {
-        SharedPreferences prefs = getSharedPreferences(Message.ARRAY_LIST_PLAYERS_IN_PREF, MODE_PRIVATE);
-        String[] strings = prefs.getString(name, "").split(Message.NEW_ITEM);
-        ArrayList<String> list = new ArrayList<>();
-        list.addAll(Arrays.asList(strings));
-        return list;
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        userCursor.close();
+        db.close();
     }
 
     @Override
@@ -152,43 +123,24 @@ public class AddPlayerOnAction extends AppCompatActivity implements View.OnClick
                 int sizeList = listView.getCount();
                 sparseBooleanArray = listView.getCheckedItemPositions();
                 int count = 0;
-                for (int i = 0; i < sizeList; i++) {
+                for (int i = 0; i < listView.getCount(); i++) {
                     if (sparseBooleanArray.get(i)){
-                        int index = searchIndex(listView.getItemAtPosition(i).toString());
-                        if (index == -1){
-                            continue;
+                        String search = listView.getItemAtPosition(i).toString();
+                        db = sqlHelper.getReadableDatabase();
+                        userCursor = db.rawQuery("SELECT * FROM " + Message.SQL_NAME_USERS_TABLE +
+                                " WHERE " + DatabaseHelper.COLUMN_FIO + "=?", new String[]{String.valueOf(search)});
+                        if (userCursor.moveToFirst()){
+                            db.execSQL("UPDATE " + Message.SQL_NAME_USERS_TABLE + " SET " +
+                                    DatabaseHelper.COLUMN_CHECKBOX + "=" + 1 +
+                                    " WHERE " + DatabaseHelper.COLUMN_FIO + "='" + search + "';");
+                            count++;
                         }
-                        count++;
-                        st = Message.CHOICE + currentFIO + Message.DEPOSIT + currentDeposit;
-                        arrayListWork.set(index,st);
                     }
                 }
                 if (count != 0){
-                    saveArrayList(Message.TEXT_LIST_PLAYERS, arrayListWork);
                     finish();
                 }
                 break;
         }
-    }
-
-    private int searchIndex(String st){
-        int index = -1;
-        String tempSt;
-        for (int i = 0; i < arrayListWork.size(); i++) {
-            tempSt = arrayListWork.get(i);
-            stateChoice = tempSt.substring(0, 3);
-            if (stateChoice.equals(Message.CHOICE)){
-                continue;
-            }
-            currentFIO = tempSt.substring(3, tempSt.indexOf(Message.DEPOSIT));
-            currentDeposit = tempSt.substring(tempSt.indexOf(Message.DEPOSIT) + 3, tempSt.length());
-            tempSt = currentFIO + " " + currentDeposit;
-            if (tempSt.equals(st)){
-                index = i;
-                break;
-            }
-
-        }
-        return index;
     }
 }

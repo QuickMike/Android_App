@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="khodkov.michael.Fundraising.Report">
+    tools:context="khodkov.michael.chipin.Report">
 
     <TextView
         android:id="@+id/textState"

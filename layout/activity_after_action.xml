@@ -6,7 +6,7 @@
     android:orientation="vertical"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    tools:context="khodkov.michael.Fundraising.AfterAction">
+    tools:context="khodkov.michael.chipin.AfterAction">
 
     <TextView
         android:id="@+id/textAfterActionTotal"
@@ -22,26 +22,30 @@
         android:layout_height="wrap_content">
     </TextView>
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
     <Button
         android:id="@+id/btnPayAllonAction"
         android:text="@string/textBtnAuto"
-        android:layout_width="150dp"
-        android:layout_height="wrap_content">
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="55dp">
     </Button>
 
     <Button
-        android:layout_alignParentRight="true"
         android:id="@+id/btnEndAction"
         android:text="@string/textBtnEnd"
-        android:layout_width="150dp"
-        android:layout_height="wrap_content">
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="55dp">
     </Button>
 
-    </RelativeLayout>
+    </LinearLayout>
+
+
 
     <ListView
         android:id="@+id/listEnd"

@@ -1,22 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="khodkov.michael.Fundraising.AddPlayerList">
+    android:padding="16dp"
+    tools:context="khodkov.michael.chipin.AddPlayerList">
 
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:id="@+id/labelFirst"
-        android:text="">
-    </TextView>
-
-    <TextView
-        android:layout_marginLeft="2dp"
-        android:layout_below="@+id/labelFirst"
+        android:layout_marginLeft="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/labelFIO"
@@ -28,22 +22,13 @@
         android:inputType="textCapSentences"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/labelFIO"
         android:background="@android:drawable/editbox_background"
         android:hint="@string/hintFIO">
     </EditText>
 
     <TextView
-        android:layout_width="10dp"
-        android:layout_height="9dp"
-        android:id="@+id/labelSecond"
-        android:layout_below="@+id/editFIO"
-        android:text="">
-    </TextView>
-
-    <TextView
-        android:layout_marginLeft="2dp"
-        android:layout_width="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/labelDeposit"
         android:layout_below="@+id/labelSecond"
@@ -54,21 +39,40 @@
     <EditText
         android:id="@+id/editDeposit"
         android:inputType="numberDecimal|numberSigned"
-        android:layout_width="100dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/labelDeposit"
         android:background="@android:drawable/editbox_background"
         android:text="@string/_0">
     </EditText>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
+        <Button
+            android:id="@+id/btnDel"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="Удалить">
+        </Button>
 
-    <Button
-        android:layout_below="@+id/editFIO"
-        android:layout_alignParentRight="true"
-        android:text="@string/textSave"
-        android:id="@+id/btnSave"
-        android:layout_width="150dp"
-        android:layout_height="60dp">
-    </Button>
+        <Button
+            android:id="@+id/btnCancel"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="Отмена">
+        </Button>
 
-</RelativeLayout>
+        <Button
+            android:id="@+id/btnSave"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="@string/textSave">
+        </Button>
+
+    </LinearLayout>
+
+</LinearLayout>

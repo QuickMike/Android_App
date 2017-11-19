@@ -5,10 +5,10 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical"
-    tools:context="khodkov.michael.Fundraising.ListActivity">
+    tools:context="khodkov.michael.chipin.ListActivity">
 
     <ListView
-        android:id="@+id/mainList"
+        android:id="@+id/listUsers"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
     </ListView>

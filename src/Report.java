@@ -1,4 +1,4 @@
-package khodkov.michael.Fundraising;
+package khodkov.michael.chipin;
 
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;

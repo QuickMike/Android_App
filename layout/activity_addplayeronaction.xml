@@ -6,30 +6,33 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="khodkov.michael.Fundraising.AddPlayerOnAction">
+    tools:context="khodkov.michael.chipin.AddPlayerOnAction">
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_height="wrap_content"
-        android:layout_width="match_parent">
+        android:layout_width="match_parent"
+        android:orientation="horizontal">
 
 
     <Button
         android:id="@+id/btnAddonaction"
         android:text="@string/textBtnAdd"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_gravity="center"
-        android:layout_height="wrap_content">
+        android:layout_weight="1"
+        android:layout_height="55dp">
     </Button>
 
         <Button
             android:id="@+id/btnCheckAll"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_height="55dp"
             android:layout_alignParentRight="true"
             android:layout_gravity="center"
+            android:layout_weight="1"
             android:text="@string/textSelectAll"></Button>
 
-    </RelativeLayout>
+    </LinearLayout>
 
     <LinearLayout
         android:layout_height="wrap_content"

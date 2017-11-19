@@ -1,4 +1,4 @@
-package khodkov.michael.Fundraising;
+package khodkov.michael.chipin;
 
 public class CorrectDeposit {
 

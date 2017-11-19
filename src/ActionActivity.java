@@ -1,7 +1,9 @@
-package khodkov.michael.Fundraising;
+package khodkov.michael.chipin;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.ContextMenu;
@@ -9,17 +11,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.RadioButton;
+import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
 
 public class ActionActivity extends AppCompatActivity implements View.OnClickListener{
 
@@ -28,21 +27,16 @@ public class ActionActivity extends AppCompatActivity implements View.OnClickLis
     protected static String totalCoast;
     protected static String oneCoast;
 
-    protected static String st;
-    protected static String stateChoice;
-    protected static String currentFIO;
-    protected static String currentDeposit;
-
     protected Button btnActionAddPlayer;
     protected Button btnActionBeginAction;
     protected TextView textView;
     protected ListView listView;
-    protected ArrayAdapter<String> newAdapter;
     protected Toast toast;
 
-    protected static ArrayList<String> arrayListWork;
-    protected static ArrayList<String> arrayListView;
-
+    DatabaseHelper sqlHelper;
+    SQLiteDatabase db;
+    Cursor userCursor;
+    SimpleCursorAdapter userAdapter;
     CorrectDeposit correctDeposit = new CorrectDeposit();
 
     @Override
@@ -57,6 +51,10 @@ public class ActionActivity extends AppCompatActivity implements View.OnClickLis
         btnActionBeginAction.setOnClickListener(this);
 
         listView = (ListView) findViewById(R.id.listAction);
+        textView = (TextView)findViewById(R.id.labelCount);
+
+        sqlHelper = new DatabaseHelper(getApplicationContext());
+
         setList();
     }
 
@@ -67,52 +65,33 @@ public class ActionActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     private void setList(){
-        btnActionBeginAction = (Button)findViewById(R.id.btnActionBegin);
-        btnActionAddPlayer = (Button)findViewById(R.id.btnActionAddPlayer);
-        listView = (ListView) findViewById(R.id.listAction);
         registerForContextMenu(listView);
-        arrayListWork = loadArrayList(Message.TEXT_LIST_PLAYERS);
-        arrayListView = setForView(arrayListWork);
-        textView = (TextView)findViewById(R.id.labelCount);
-        textView.setText(String.valueOf(arrayListView.size()));
-        newAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, arrayListView);
-        listView.setAdapter(newAdapter);
-        btnActionAddPlayer.setEnabled(false);
-        if (arrayListWork.size() == 1 && arrayListWork.get(0).equals("") || arrayListWork.isEmpty()){
-            btnActionAddPlayer.setEnabled(false);
-        } else {
-            for (int i = 0; i < arrayListWork.size(); i++) {
-                String st = arrayListWork.get(i);
-                stateChoice = st.substring(0, 3);
-                if (stateChoice.equals(Message.NOT_CHOICE)){
-                    btnActionAddPlayer.setEnabled(true);
-                    break;
-                }
-            }
-        }
-
+        textView.setText("Всего участников: 0");
+        loadSQLdata();
         btnActionBeginAction.setEnabled(false);
-        if (!arrayListView.isEmpty()){
+        userCursor =  db.rawQuery("SELECT * FROM "+ Message.SQL_NAME_USERS_TABLE +
+                " WHERE " + DatabaseHelper.COLUMN_CHECKBOX + "=1;", null);
+        if (userCursor.getCount() > 0){
             btnActionBeginAction.setEnabled(true);
+            textView.setText("Всего участников: " + userCursor.getCount());
         }
     }
 
-    private ArrayList<String> setForView(ArrayList<String> list){
-        ArrayList<String> newList = new ArrayList<>();
-        if (list.size() == 1 && list.get(0).equals("")){
-            return newList;
-        }
-        for (int i = 0; i < list.size(); i++) {
-            String st = list.get(i);
-            stateChoice = st.substring(0, 3);
-            if (stateChoice.equals(Message.NOT_CHOICE)){
-                continue;
-            }
-            st = st.replaceFirst(Message.DEPOSIT, " ");
-            st = st.replaceFirst(Message.CHOICE, "");
-            newList.add(st);
-        }
-        return newList;
+    private void loadSQLdata(){
+        db = sqlHelper.getReadableDatabase();
+        userCursor =  db.rawQuery("SELECT * FROM "+ Message.SQL_NAME_USERS_TABLE +
+                " WHERE " + DatabaseHelper.COLUMN_CHECKBOX + "=1;", null);
+        String[] headers = new String[] {DatabaseHelper.COLUMN_FIO, DatabaseHelper.COLUMN_DEPO};
+        userAdapter = new SimpleCursorAdapter(this, android.R.layout.two_line_list_item,
+                userCursor, headers, new int[]{android.R.id.text1, android.R.id.text2}, 0);
+        listView.setAdapter(userAdapter);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        userCursor.close();
+        db.close();
     }
 
     @Override
@@ -128,10 +107,9 @@ public class ActionActivity extends AppCompatActivity implements View.OnClickLis
                     finish();
                     flagBeginAction = true;
                     saveBooleanFlag(Message.TEXT_FLAG_ACTION, flagBeginAction);
-                    saveCoastAction(Message.TEXT_COAST);
+                    saveCoastAction(Message.TEXT_COAST_ONE, Message.TEXT_COAST_ALL);
                     setDebt();
                     setNewReport();
-                    saveArrayList(Message.TEXT_LIST_PLAYERS, arrayListWork);
                     intent = new Intent(this, AfterAction.class);
                     startActivity(intent);
                 } else {
@@ -147,8 +125,8 @@ public class ActionActivity extends AppCompatActivity implements View.OnClickLis
         long date = System.currentTimeMillis();
         SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy, HH:mm");
         st = st + sdf.format(date) + "\n";
-        st = st + "Всего участвовало: " + arrayListView.size() + "\n";
-        st = st + "Оплата с каждого: " + oneCoast + " Итого со всех: " + totalCoast + "\n";
+        st = st + "Всего участвовало: " + totalPay() + "\n";
+        st = st + "Оплата с каждого: " + oneCoast + "\nИтого со всех: " + totalCoast + "\n";
         st = st + "=======================================\n";
         saveReport(Message.TEXT_REPORT, st);
     }
@@ -160,27 +138,31 @@ public class ActionActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     private void setDebt() {
-        for (int i = 0; i < arrayListWork.size(); i++) {
-            st = arrayListWork.get(i);
-            stateChoice = st.substring(0, 3);
-            if (stateChoice.equals(Message.NOT_CHOICE)){
-                continue;
-            }
-            currentFIO = st.substring(3, st.indexOf(Message.DEPOSIT));
-            currentDeposit = st.substring(st.indexOf(Message.DEPOSIT) + 3, st.length());
-            float currentDepo = Float.parseFloat(currentDeposit);
+        String currentDepo;
+        db = sqlHelper.getReadableDatabase();
+        userCursor =  db.rawQuery("SELECT * FROM "+ Message.SQL_NAME_USERS_TABLE +
+                " WHERE " + DatabaseHelper.COLUMN_CHECKBOX + "=1;", null);
+        while (userCursor.moveToNext()){
+            currentDepo = userCursor.getString(2);
+            float currentFDepo = Float.parseFloat(currentDepo);
             float pay = Float.parseFloat(oneCoast);
-            currentDepo = currentDepo - pay;
-            st = stateChoice + currentFIO + Message.DEPOSIT + correctDeposit.setCorrectDeposit(String.valueOf(currentDepo));
-            arrayListWork.set(i, st);
+            currentFDepo = currentFDepo - pay;
+            currentDepo = correctDeposit.setCorrectDeposit(String.valueOf(currentFDepo));
+            db.execSQL("UPDATE " + Message.SQL_NAME_USERS_TABLE +
+                    " SET " + DatabaseHelper.COLUMN_DEPO + "='" + currentDepo + "'" +
+                    " WHERE " + DatabaseHelper.COLUMN_ID + "=" + userCursor.getString(0));
         }
     }
 
-    private void saveCoastAction(String name) {
-        SharedPreferences pref = getSharedPreferences(Message.COAST_IN_PREF, MODE_PRIVATE);
+    private void saveCoastAction(String name, String name2) {
+        SharedPreferences pref = getSharedPreferences(Message.COAST_ONE_IN_PREF, MODE_PRIVATE);
         SharedPreferences.Editor editor = pref.edit();
-        String putString = oneCoast + Message.NEW_ITEM + totalCoast;
+        String putString = oneCoast;
         editor.putString(name, putString).apply();
+        pref = getSharedPreferences(Message.COAST_ALL_IN_PREF, MODE_PRIVATE);
+        editor = pref.edit();
+        putString = totalCoast;
+        editor.putString(name2, putString).apply();
     }
 
     private boolean isNeedPay() {
@@ -210,15 +192,10 @@ public class ActionActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     private int totalPay() {
-        int count = 0;
-        for (int i = 0; i < arrayListWork.size(); i++) {
-            st = arrayListWork.get(i);
-            stateChoice = st.substring(0, 3);
-            if (stateChoice.equals(Message.CHOICE)) {
-                count++;
-            }
-        }
-        return count;
+        db = sqlHelper.getReadableDatabase();
+        userCursor =  db.rawQuery("SELECT * FROM "+ Message.SQL_NAME_USERS_TABLE +
+                " WHERE " + DatabaseHelper.COLUMN_CHECKBOX + "=1;", null);
+        return userCursor.getCount();
     }
 
 
@@ -236,7 +213,7 @@ public class ActionActivity extends AppCompatActivity implements View.OnClickLis
         switch (item.getItemId())
         {
             case Message.IDM_BACK:
-                unCheck(info.position);
+                unCheck(info.id);
                 break;
             case Message.IDM_BACK_ALL:
                 unCheckAll();
@@ -245,83 +222,28 @@ public class ActionActivity extends AppCompatActivity implements View.OnClickLis
         return super.onContextItemSelected(item);
     }
 
-    private void unCheck(int position){
-        int index = searchIndex(arrayListView.get(position));
-        if ( index != -1){
-            st = Message.NOT_CHOICE + currentFIO + Message.DEPOSIT + currentDeposit;
-            arrayListWork.set(index,st);
-            saveArrayList(Message.TEXT_LIST_PLAYERS, arrayListWork);
-            toast = Toast.makeText(this, "Убрали", Toast.LENGTH_SHORT);
-            toast.show();
-            setList();
-        }
-    }
-
-    private int searchIndex(String st){
-        int index = -1;
-        String tempSt;
-        for (int i = 0; i < arrayListWork.size(); i++) {
-            tempSt = arrayListWork.get(i);
-            stateChoice = tempSt.substring(0, 3);
-            if (stateChoice.equals(Message.NOT_CHOICE)){
-                continue;
-            }
-            currentFIO = tempSt.substring(3, tempSt.indexOf(Message.DEPOSIT));
-            currentDeposit = tempSt.substring(tempSt.indexOf(Message.DEPOSIT) + 3, tempSt.length());
-            tempSt = currentFIO + " " + currentDeposit;
-            if (tempSt.equals(st)){
-                index = i;
-                break;
-            }
-
-        }
-        return index;
+    private void unCheck(long userId){
+        db = sqlHelper.getWritableDatabase();
+        db.execSQL("UPDATE " + Message.SQL_NAME_USERS_TABLE +
+                " SET " + DatabaseHelper.COLUMN_CHECKBOX + "=0 " +
+                " WHERE " + DatabaseHelper.COLUMN_ID + "=" + userId);
+        toast = Toast.makeText(this, "Убрали", Toast.LENGTH_SHORT);
+        toast.show();
+        setList();
     }
 
     private void unCheckAll() {
-        for (int i = 0; i < arrayListWork.size(); i++) {
-            st = arrayListWork.get(i);
-            stateChoice = st.substring(0, 3);
-            if (stateChoice.equals(Message.NOT_CHOICE)){
-                continue;
-            }
-            currentFIO = st.substring(3, st.indexOf(Message.DEPOSIT));
-            currentDeposit = st.substring(st.indexOf(Message.DEPOSIT) + 3, st.length());
-            st = Message.NOT_CHOICE + currentFIO + Message.DEPOSIT + currentDeposit;
-            arrayListWork.set(i, st);
-        }
-        saveArrayList(Message.TEXT_LIST_PLAYERS, arrayListWork);
-        setList();
+        db = sqlHelper.getWritableDatabase();
+        db.execSQL("UPDATE " + Message.SQL_NAME_USERS_TABLE +
+                " SET " + DatabaseHelper.COLUMN_CHECKBOX + "=0;");
         toast = Toast.makeText(this, "Убрали всех", Toast.LENGTH_SHORT);
         toast.show();
+        setList();
     }
 
     private void saveBooleanFlag(String name, boolean flag){
         SharedPreferences pref = getSharedPreferences(Message.BOOLEAN_IN_PREF, MODE_PRIVATE);
         SharedPreferences.Editor editor = pref.edit();
         editor.putBoolean(name, flag).apply();
-    }
-
-    private void saveArrayList(String name, ArrayList<String> list) {
-        SharedPreferences prefs = getSharedPreferences(Message.ARRAY_LIST_PLAYERS_IN_PREF, MODE_PRIVATE);
-        SharedPreferences.Editor editor = prefs.edit();
-        StringBuilder sb = new StringBuilder();
-        for (String s : list){
-            if (!s.equals("")){
-                sb.append(s).append(Message.NEW_ITEM);
-            }
-        }
-        if (sb.length() > 3){
-            sb.delete(sb.length() - 3, sb.length());
-        }
-        editor.putString(name, sb.toString()).apply();
-    }
-
-    private ArrayList<String> loadArrayList(String name) {
-        SharedPreferences prefs = getSharedPreferences(Message.ARRAY_LIST_PLAYERS_IN_PREF, MODE_PRIVATE);
-        String[] strings = prefs.getString(name, "").split(Message.NEW_ITEM);
-        ArrayList<String> list = new ArrayList<>();
-        list.addAll(Arrays.asList(strings));
-        return list;
     }
 }

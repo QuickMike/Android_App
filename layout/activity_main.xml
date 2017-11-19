@@ -4,8 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="khodkov.michael.Fundraising.MainActivity"
-    android:orientation="vertical">
+    tools:context="khodkov.michael.chipin.MainActivity"
+    android:orientation="vertical"
+    >
 
     <Button
         android:id="@+id/btnMainBegin"
@@ -44,13 +45,12 @@
     </Button>
 
     <TextView
-        android:gravity="center"
-        android:layout_marginTop="50dp"
-        android:layout_gravity="center"
-        android:id="@+id/labelMain"
-        android:text="Зайдите в СПИСОК ВСЕХ ИГРОКОВ и добавьте новых, чтобы начать мероприятие"
-        android:layout_width="300dp"
-        android:layout_height="wrap_content">
+        android:layout_marginTop="80dp"
+        android:layout_gravity="end"
+        android:id="@+id/labelMainVersion"
+        android:text="v"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        >
     </TextView>
-
 </LinearLayout>

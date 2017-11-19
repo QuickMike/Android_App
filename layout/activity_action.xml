@@ -5,26 +5,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="khodkov.michael.Fundraising.ActionActivity">
+    tools:context="khodkov.michael.chipin.ActionActivity">
 
-    <RelativeLayout>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/labelActionCost"
-            android:text="@string/textCost">
-        </TextView>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/labelCount"
-            android:layout_alignParentRight="true"
-            android:text="">
-        </TextView>
-
-    </RelativeLayout>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/labelActionCost"
+        android:text="@string/textCost">
+    </TextView>
 
     <LinearLayout
         android:orientation="horizontal"
@@ -81,12 +69,16 @@
 
     </LinearLayout>
 
-    <RelativeLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
         <Button
             android:id="@+id/btnActionAddPlayer"
-            android:layout_width="150dp"
-            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="55dp"
             android:layout_gravity="center"
             android:text="@string/textBtnAdd">
         </Button>
@@ -94,13 +86,22 @@
         <Button
             android:layout_alignParentRight="true"
             android:id="@+id/btnActionBegin"
-            android:layout_width="150dp"
+            android:layout_width="0dp"
+            android:layout_weight="1"
             android:layout_gravity="center"
-            android:layout_height="wrap_content"
+            android:layout_height="55dp"
             android:text="@string/textBtnStart">
         </Button>
 
-    </RelativeLayout>
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/labelCount"
+        android:layout_alignParentRight="true"
+        android:text="Всего участников: ">
+    </TextView>
 
     <ListView
         android:layout_below="@+id/btnActionAddPlayer"
